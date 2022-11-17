@@ -2,9 +2,39 @@ import React from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "../index.css";
-import argentBankLogo from "../img/argentBankLogo.png";
-
+import { useSelector, useDispatch } from "react-redux";
+import { setFirstName, setLastName } from "../feature/userSlice";
+import { getUserInfo } from "../api";
 export default function User() {
+    const getFirstName = (state) => state.user.firstName;
+    const getLastName = (state) => state.user.lastName;
+    const firstName = useSelector(getFirstName);
+    const lastName = useSelector(getLastName);
+    const dispatch = useDispatch();
+
+    getUserInfo()
+        .then((data) => {
+            console.log(data);
+            dispatch(setFirstName(data.body.firstName));
+            dispatch(setLastName(data.body.lastName));
+        })
+        .catch((err) => {
+            if (err.response.status === 400) {
+                // dispatch(setLoginError("Erreur d'identification"));
+            } else {
+                // dispatch(
+                //     setLoginError(
+                //         "Oups! Connexion impossible. Veuillez réesayer plus tard."
+                //     )
+                // );
+                // console.log(error);
+            }
+        });
+
+    // pour vide les champs
+    // emailInputRef.current.value = "";
+    // passwordInputRef.current.value = "";
+
     return (
         <>
             <Header />
@@ -12,8 +42,11 @@ export default function User() {
                 <div className="header">
                     <h1>
                         Welcome back
-                        <br />
-                        Tony Jarvis!
+                        <div>
+                            <pre>
+                                {firstName} {lastName}
+                            </pre>
+                        </div>
                     </h1>
                     <button className="edit-button">Edit Name</button>
                 </div>
