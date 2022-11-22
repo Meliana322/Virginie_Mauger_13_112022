@@ -8,6 +8,7 @@ import {
     setLoginError,
     setToken,
 } from "../feature/loginSlice";
+import { setFirstName } from "../feature/userSlice";
 import ErrorModal from "../components/ErrorModal/ErrorModal";
 import Button from "../components/Button/Button";
 import { useNavigate } from "react-router-dom";
@@ -15,10 +16,6 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
     const emailInputRef = useRef();
     const passwordInputRef = useRef();
-    const isLoggedIn = true;
-
-    const [isLogin, setIsLogin] = useState();
-    const [data, setData] = useState();
     const [error, setError] = useState();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -79,9 +76,9 @@ export default function Login() {
         })
             .then((response) => response.json())
             .then((data) => {
-                // setData(data);
                 dispatch(setLoginSuccessFul());
                 dispatch(setToken(data.body.token));
+                localStorage.setItem("token", data.body.token);
                 navigate("/user/profile");
             })
             .catch((err) => {
@@ -102,20 +99,12 @@ export default function Login() {
         // passwordInputRef.current.value = "";
     };
 
-    // console.log(data);
-
     const errorHandler = (event) => {
         setError(null);
     };
 
     return (
         <>
-            {/* {isLoggedIn && <p>Vous etes connecté</p>}
-            {!isLoggedIn && <p>Vous n'etes pas connecté</p>}
-            {isLoggedIn && <p>Votre token : </p>}
-            {isLoggedIn && <p>Votre userId : </p>}
-            {isLoggedIn && <p>Se déconnecter </p>}
-            {isLoggedIn && <Button>Se déconnecter</Button>} */}
             <Header />
             <main className="main bg-dark">
                 <section className="sign-in-content">
@@ -130,7 +119,7 @@ export default function Login() {
                     )}
                     <form onSubmit={submitHandler}>
                         <div className="input-wrapper">
-                            <label for="username">Username</label>
+                            <label htmlFor="username">Username</label>
                             <input
                                 type="text"
                                 id="username"
@@ -138,7 +127,7 @@ export default function Login() {
                             />
                         </div>
                         <div className="input-wrapper">
-                            <label for="password">Password</label>
+                            <label htmlFor="password">Password</label>
                             <input
                                 type="current-password"
                                 id="password"

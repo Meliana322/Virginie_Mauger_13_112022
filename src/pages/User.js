@@ -1,16 +1,44 @@
-import React from "react";
+import { useRef } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "../index.css";
 import { useSelector, useDispatch } from "react-redux";
 import { setFirstName, setLastName } from "../feature/userSlice";
-import { getUserInfo } from "../api";
+import { getUserInfo, postUserInfo } from "../api";
+import Button from "../components/Button/Button";
+
 export default function User() {
     const getFirstName = (state) => state.user.firstName;
-    const getLastName = (state) => state.user.lastName;
     const firstName = useSelector(getFirstName);
+
+    const getLastName = (state) => state.user.lastName;
     const lastName = useSelector(getLastName);
+
     const dispatch = useDispatch();
+    const firstNameInputRef = useRef();
+    const lastNameInputRef = useRef();
+
+    const submitHandler = (event) => {
+        event.preventDefault();
+        postUserInfo(
+            firstNameInputRef.current.value === ""
+                ? firstName
+                : firstNameInputRef.current.value,
+            lastNameInputRef.current.value === ""
+                ? lastName
+                : lastNameInputRef.current.value
+        )
+            .then(getUserInfo)
+            .then((data) => {
+                console.log(data);
+                dispatch(setFirstName(data.body.firstName));
+                dispatch(setLastName(data.body.lastName));
+            });
+
+        const enteredFirstName = firstNameInputRef.current.value;
+        const enteredLastName = lastNameInputRef.current.value;
+        console.log(enteredFirstName, enteredLastName);
+    };
 
     getUserInfo()
         .then((data) => {
@@ -50,6 +78,34 @@ export default function User() {
                     </h1>
                     <button className="edit-button">Edit Name</button>
                 </div>
+                <div className="header">
+                    <form onSubmit={submitHandler}>
+                        <h1>Welcome back</h1>
+                        <input
+                            className="edit-input name"
+                            autoComplete="off"
+                            type="text"
+                            placeholder={firstName}
+                            ref={firstNameInputRef}
+                        />
+                        <input
+                            className="edit-input name"
+                            autoComplete="off"
+                            type="text"
+                            placeholder={lastName}
+                            ref={lastNameInputRef}
+                        />
+                        <br /> <br />
+                        <Button
+                            className="edit-button"
+                            type={"submit"}
+                            onClick={() => {}}
+                        >
+                            Save
+                        </Button>
+                    </form>
+                </div>
+
                 <h2 className="sr-only">Accounts</h2>
                 <section className="account">
                     <div className="account-content-wrapper">
