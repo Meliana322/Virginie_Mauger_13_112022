@@ -1,14 +1,15 @@
 import React, { useState, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // import { Navigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import {
     setLoginSuccessFul,
     setLoginError,
+    setRememberCheckbox,
+    setRememberEmail,
     setToken,
 } from "../feature/loginSlice";
-import { setFirstName } from "../feature/userSlice";
 import ErrorModal from "../components/ErrorModal/ErrorModal";
 import Button from "../components/Button/Button";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +20,7 @@ export default function Login() {
     const [error, setError] = useState();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const remember_ = useSelector((state) => state.login.remember);
 
     // controler si erreur a true ou false
 
