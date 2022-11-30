@@ -2,15 +2,20 @@ import React from "react";
 import argentBankLogo from "../img/argentBankLogo.png";
 import "../index.css";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setLogout } from "../feature/loginSlice";
+import { setEditName } from "../feature/userSlice";
 
 export default function Header() {
     const dispatch = useDispatch();
+    const { Authorization } = useSelector((state) => state.login);
+    const { firstName } = useSelector((state) => state.user);
 
-    const logOut = () => {
+    const handleLogout = () => {
         dispatch(setLogout());
-        localStorage.clear();
+        dispatch(setEditName());
+        // localStorage.clear();
+        localStorage.removeItem("token");
     };
     return (
         <nav className="main-nav">
@@ -23,18 +28,26 @@ export default function Header() {
                 <h1 className="sr-only">Argent Bank</h1>
             </Link>
             <div>
-                <Link to="/user/login" className="main-nav-item">
-                    <i className="fa fa-user-circle"></i>
-                    Sign In
-                </Link>
-                <button
-                    onClick={logOut}
-                    to="/user/login"
-                    className="main-nav-item"
-                >
-                    <i className="fa fa-sign-out"></i>
-                    Sign Out
-                </button>
+                {Authorization ? (
+                    <>
+                        <Link to="/user/profile" className="main-nav-item name">
+                            <i className="fa fa-user-circle"></i>
+                            {firstName}
+                        </Link>
+                        <Link
+                            to="/user/login"
+                            onClick={handleLogout}
+                            className="main-nav-item logoutButton"
+                        >
+                            <i className="fa fa-sign-out"></i>
+                            Sign Out
+                        </Link>
+                    </>
+                ) : (
+                    <Link to="/user/login" className="main-nav-item">
+                        <i className="fa fa-user-circle"></i> Sign In
+                    </Link>
+                )}
             </div>
         </nav>
     );

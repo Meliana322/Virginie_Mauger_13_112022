@@ -1,6 +1,6 @@
 import store from "./app/store";
 
-export function getUserInfo(token) {
+export function getUserInfo(token, email) {
     const url = "http://localhost:3001/api/v1/user/profile";
     return fetch(url, {
         method: "POST",
@@ -11,7 +11,7 @@ export function getUserInfo(token) {
         },
     }).then((response) => response.json());
 }
-export function postUserInfo(firstName, lastName) {
+export function postUserInfo(firstName, lastName, email) {
     const url = "http://localhost:3001/api/v1/user/profile";
     return fetch(url, {
         method: "PUT",
@@ -20,6 +20,6 @@ export function postUserInfo(firstName, lastName) {
             // Authorization: `Bearer ${store.getState().login.token}`,
             Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({ firstName, lastName }),
+        body: JSON.stringify({ firstName, lastName, email }),
     }).then((response) => response.json());
 }

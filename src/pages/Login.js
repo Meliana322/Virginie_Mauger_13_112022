@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
     const emailInputRef = useRef();
     const passwordInputRef = useRef();
+    const checkboxRef = useRef();
     const [error, setError] = useState();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -61,6 +62,9 @@ export default function Login() {
             return;
         }
 
+        if (checkboxRef.current.checked) {
+            localStorage.setItem("userEmail", enteredEmail);
+        }
         console.log(enteredEmail, enteredPassword);
 
         // Pour se connecter pour récupérer le UserId et le token d'authentification
@@ -76,23 +80,38 @@ export default function Login() {
                 "Content-Type": "application/json",
             },
         })
-            .then((response) => response.json())
+            .then((response) => {
+                if (!response.ok) {
+                    // setError({
+                    //     title: "",
+                    //     message: "Erreur d'identification",
+                    // });
+                    throw new Error("test msg");
+                }
+                return response.json();
+            })
             .then((data) => {
                 dispatch(setLoginSuccessFul());
                 dispatch(setToken(data.body.token));
                 localStorage.setItem("token", data.body.token);
+                localStorage.setItem("email", data.body.email);
                 navigate("/user/profile");
             })
             .catch((err) => {
-                if (error.response.status === 400) {
-                    dispatch(setLoginError("Erreur d'identification"));
+                if (error?.response?.status === 400) {
+                    // dispatch(setLoginError("Erreur d'identification"));
+                    setError({
+                        title: "",
+                        message: "Erreur d'identification222",
+                    });
                 } else {
-                    dispatch(
-                        setLoginError(
-                            "Oups! Connexion impossible. Veuillez réesayer plus tard."
-                        )
-                    );
-                    console.log(error);
+                    // dispatch(
+                    //     setLoginError(
+                    //         "Oups! Connexion impossible. Veuillez réesayer plus tard."
+                    //     )
+                    // );
+
+                    console.log(2);
                 }
             });
 
@@ -122,7 +141,9 @@ export default function Login() {
                     <form onSubmit={submitHandler}>
                         <div className="input-wrapper">
                             <label htmlFor="username">Username</label>
+                            {/* Lorsque je me deconnecte si state remember me est a true alors affiche imput.value = email */}
                             <input
+                                defaultValue={localStorage.getItem("userEmail")}
                                 type="text"
                                 id="username"
                                 ref={emailInputRef}
@@ -137,8 +158,15 @@ export default function Login() {
                             />
                         </div>
                         <div className="input-remember">
-                            <input type="checkbox" id="remember-me" />
-                            <label for="remember-me">Remember me</label>
+                            {/* <input type="checkbox" id="remember-me" /> */}
+                            {/* lorsque click checkbox, si c'est coché, le state remember me passe a true sinon false */}
+                            {/* si remember me est coché, rappelles toi de l'email */}
+                            <input
+                                ref={checkboxRef}
+                                type="checkbox"
+                                id="remember-me"
+                            />
+                            <label htmlFor="remember-me">Remember me</label>
                         </div>
                         <Button type={"submit"} onClick={() => {}}>
                             Sign In
@@ -150,3 +178,20 @@ export default function Login() {
         </>
     );
 }
+// function gBox(nbCheck){
+//     if(document.getElementById(nbCheck).checked == true){
+//         document.getElementById('formulaire1').submit();
+//     }
+//     else{
+//         alert('Checkbox non coché !');
+//     }
+// }
+
+// 1
+// 2
+// 3
+// 4
+// <form method="post" id="formulaire1" action="">
+// <input type="checkbox" id="check1" />Checkbox 1
+// <input type="submit" onClick="gBox('check1'); return false;" />
+// </form>

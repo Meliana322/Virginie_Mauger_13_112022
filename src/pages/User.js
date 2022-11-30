@@ -1,13 +1,14 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "../index.css";
 import { useSelector, useDispatch } from "react-redux";
-import { setFirstName, setLastName } from "../feature/userSlice";
+import { setEmail, setFirstName, setLastName } from "../feature/userSlice";
 import { getUserInfo, postUserInfo } from "../api";
 import Button from "../components/Button/Button";
 
 export default function User() {
+    const [isOpen, setIsOpen] = useState(false);
     const getFirstName = (state) => state.user.firstName;
     const firstName = useSelector(getFirstName);
 
@@ -45,6 +46,7 @@ export default function User() {
             console.log(data);
             dispatch(setFirstName(data.body.firstName));
             dispatch(setLastName(data.body.lastName));
+            // dispatch(setEmail(data.body.email));
         })
         .catch((err) => {
             if (err.response.status === 400) {
@@ -76,35 +78,44 @@ export default function User() {
                             </pre>
                         </div>
                     </h1>
-                    <button className="edit-button">Edit Name</button>
+                    <button
+                        className="edit-button"
+                        onClick={() => setIsOpen(!isOpen)}
+                    >
+                        Edit Name
+                    </button>
                 </div>
-                <div className="header">
-                    <form onSubmit={submitHandler}>
-                        <h1>Welcome back</h1>
-                        <input
-                            className="edit-input name"
-                            autoComplete="off"
-                            type="text"
-                            placeholder={firstName}
-                            ref={firstNameInputRef}
-                        />
-                        <input
-                            className="edit-input name"
-                            autoComplete="off"
-                            type="text"
-                            placeholder={lastName}
-                            ref={lastNameInputRef}
-                        />
-                        <br /> <br />
-                        <Button
-                            className="edit-button"
-                            type={"submit"}
-                            onClick={() => {}}
-                        >
-                            Save
-                        </Button>
-                    </form>
-                </div>
+                {isOpen && (
+                    <div className="header">
+                        <form onSubmit={submitHandler}>
+                            <h1>Welcome back</h1>
+                            <input
+                                className="edit-input name"
+                                autoComplete="off"
+                                type="text"
+                                placeholder={firstName}
+                                ref={firstNameInputRef}
+                            />
+                            <input
+                                className="edit-input name"
+                                autoComplete="off"
+                                type="text"
+                                placeholder={lastName}
+                                ref={lastNameInputRef}
+                            />
+                            <br /> <br />
+                            <Button
+                                className="edit-button"
+                                type={"submit"}
+                                onClick={() => {
+                                    setIsOpen((prevIsOpen) => !prevIsOpen);
+                                }}
+                            >
+                                Save
+                            </Button>
+                        </form>
+                    </div>
+                )}
 
                 <h2 className="sr-only">Accounts</h2>
                 <section className="account">
