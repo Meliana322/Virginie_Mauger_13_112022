@@ -19,8 +19,6 @@ export default function User() {
     let firstNameInputRef = useRef();
     const lastNameInputRef = useRef();
 
-    const buttonRemove = useRef();
-
     const submitHandler = (event) => {
         event.preventDefault();
         postUserInfo(
@@ -113,15 +111,13 @@ export default function User() {
                                 Save
                             </Button>
                             <Button
-                                ref={buttonRemove}
-                                onClick={() => {
-                                    buttonRemove();
-                                }}
                                 className="cancel-button"
+                                onClick={() => {
+                                    setIsOpen((prevIsOpen) => !prevIsOpen);
+                                }}
                             >
                                 Cancel
                             </Button>
-                            {/* <Button className="cancel-button">Cancel</Button> */}
                         </form>
                     </div>
                 )}
