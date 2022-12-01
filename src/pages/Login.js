@@ -3,13 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 // import { Navigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import {
-    setLoginSuccessFul,
-    setLoginError,
-    setRememberCheckbox,
-    setRememberEmail,
-    setToken,
-} from "../feature/loginSlice";
+import { setLoginSuccessFul, setToken } from "../feature/loginSlice";
 import ErrorModal from "../components/ErrorModal/ErrorModal";
 import Button from "../components/Button/Button";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +15,6 @@ export default function Login() {
     const [error, setError] = useState();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const remember_ = useSelector((state) => state.login.remember);
 
     // controler si erreur a true ou false
 
@@ -64,6 +57,8 @@ export default function Login() {
 
         if (checkboxRef.current.checked) {
             localStorage.setItem("userEmail", enteredEmail);
+        } else {
+            localStorage.clear();
         }
         console.log(enteredEmail, enteredPassword);
 
@@ -158,9 +153,6 @@ export default function Login() {
                             />
                         </div>
                         <div className="input-remember">
-                            {/* <input type="checkbox" id="remember-me" /> */}
-                            {/* lorsque click checkbox, si c'est coché, le state remember me passe a true sinon false */}
-                            {/* si remember me est coché, rappelles toi de l'email */}
                             <input
                                 ref={checkboxRef}
                                 type="checkbox"
@@ -178,20 +170,3 @@ export default function Login() {
         </>
     );
 }
-// function gBox(nbCheck){
-//     if(document.getElementById(nbCheck).checked == true){
-//         document.getElementById('formulaire1').submit();
-//     }
-//     else{
-//         alert('Checkbox non coché !');
-//     }
-// }
-
-// 1
-// 2
-// 3
-// 4
-// <form method="post" id="formulaire1" action="">
-// <input type="checkbox" id="check1" />Checkbox 1
-// <input type="submit" onClick="gBox('check1'); return false;" />
-// </form>

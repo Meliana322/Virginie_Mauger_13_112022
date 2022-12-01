@@ -3,21 +3,23 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "../index.css";
 import { useSelector, useDispatch } from "react-redux";
-import { setEmail, setFirstName, setLastName } from "../feature/userSlice";
+import { setEditName, setFirstName, setLastName } from "../feature/userSlice";
 import { getUserInfo, postUserInfo } from "../api";
 import Button from "../components/Button/Button";
 
 export default function User() {
     const [isOpen, setIsOpen] = useState(false);
-    const getFirstName = (state) => state.user.firstName;
+    let getFirstName = (state) => state.user.firstName;
     const firstName = useSelector(getFirstName);
 
     const getLastName = (state) => state.user.lastName;
     const lastName = useSelector(getLastName);
 
     const dispatch = useDispatch();
-    const firstNameInputRef = useRef();
+    let firstNameInputRef = useRef();
     const lastNameInputRef = useRef();
+
+    const buttonRemove = useRef();
 
     const submitHandler = (event) => {
         event.preventDefault();
@@ -41,12 +43,13 @@ export default function User() {
         console.log(enteredFirstName, enteredLastName);
     };
 
+    // const formReset = (event) => {};
+
     getUserInfo()
         .then((data) => {
             console.log(data);
             dispatch(setFirstName(data.body.firstName));
             dispatch(setLastName(data.body.lastName));
-            // dispatch(setEmail(data.body.email));
         })
         .catch((err) => {
             if (err.response.status === 400) {
@@ -80,7 +83,9 @@ export default function User() {
                     </h1>
                     <button
                         className="edit-button"
-                        onClick={() => setIsOpen(!isOpen)}
+                        onClick={() => {
+                            setIsOpen((prevIsOpen) => !prevIsOpen);
+                        }}
                     >
                         Edit Name
                     </button>
@@ -104,15 +109,19 @@ export default function User() {
                                 ref={lastNameInputRef}
                             />
                             <br /> <br />
-                            <Button
-                                className="edit-button"
-                                type={"submit"}
-                                onClick={() => {
-                                    setIsOpen((prevIsOpen) => !prevIsOpen);
-                                }}
-                            >
+                            <Button className="edit-button" type={"submit"}>
                                 Save
                             </Button>
+                            <Button
+                                ref={buttonRemove}
+                                onClick={() => {
+                                    buttonRemove();
+                                }}
+                                className="cancel-button"
+                            >
+                                Cancel
+                            </Button>
+                            {/* <Button className="cancel-button">Cancel</Button> */}
                         </form>
                     </div>
                 )}

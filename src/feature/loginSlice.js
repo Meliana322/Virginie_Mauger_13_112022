@@ -5,7 +5,6 @@ export const loginSlice = createSlice({
     initialState: {
         Authorization: null,
         token: null,
-        remember: false,
     },
     reducers: {
         setLogout: (state, { payload }) => {
@@ -18,24 +17,13 @@ export const loginSlice = createSlice({
         setLoginError: (state, { payload }) => {
             state.Authorization = false;
         },
-        setRememberCheckbox: (state, { payload }) => {
-            state.remember = false;
-        },
-        setRememberEmail: (state, { payload }) => {
-            state.email = payload;
-        },
+
         setToken: (state, { payload }) => {
             state.token = payload;
         },
     },
 });
 
-export const {
-    setLogout,
-    setLoginSuccessFul,
-    setLoginError,
-    setRememberCheckbox,
-    setRememberEmail,
-    setToken,
-} = loginSlice.actions;
+export const { setLogout, setLoginSuccessFul, setLoginError, setToken } =
+    loginSlice.actions;
 export default loginSlice.reducer;
