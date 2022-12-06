@@ -6,6 +6,7 @@ export default function Button(props) {
     return (
         <>
             <button
+                disabled={props.disabled}
                 className={style.sign_in_button}
                 type={props.type || "button"}
                 onClick={props.onClick}

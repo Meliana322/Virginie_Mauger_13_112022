@@ -1,0 +1,249 @@
+swagger: "2.0"
+info:
+    title: Bank Argent API documentation
+    description: modeling of API endpoints for the transaction part in the development phase
+    version: 1.0.0
+    termsOfService: http://swagger.io/terms/
+host: localhost:3001
+basePath: /api/v1
+schemes:
+    - http
+paths:
+  /transactions/{startDate}/{endDate}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+         - User all Transactions
+      summary: User all transactions
+      description: Show all transactions per current month
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+        - in: path
+          name: startDate
+          description: Start date to transaction
+          type: string
+          required: true
+        - in: path
+          name: endDate
+          description: End date to transaction
+          type: string
+          required: true
+      produces:
+        - application/json
+      responses:
+        "200":
+            description: User transactions retrieved successully
+            schema:
+                $ref: "#/definitions/AllTransactionsResponse"
+        "400":
+            description: Invalid Fields
+        "500":
+            description: Internal Server Error
+  /transactions/{transactionId}:
+      get:
+          security:
+              - Bearer: []
+          tags:
+              - User Transaction
+          summary: User transactions details
+          description: API for fetching a transaction details
+          parameters:
+              - in: header
+                name: Authorization
+                type: string
+                description: Attach Bearer JWT token
+                required: true
+              - in: path
+                name: transactionId
+                type: integer
+                description: transaction id
+                required: true
+          produces:
+              - application/json
+          responses:
+              "200":
+                  description: User transaction details retrieved successully
+                  schema:
+                      $ref: "#/definitions/TransactionResponse"
+              "400":
+                  description: Invalid Fields
+              "500":
+                  description: Internal Server Error
+      put:
+          security:
+              - Bearer: []
+          tags:
+              - User Transaction update
+          summary: User transaction update category and notes
+          description: update a user transaction details
+          parameters:
+
+              - in: header
+                name: Authorization
+                type: string
+                description: Attach Bearer JWT token
+                required: true
+
+              - in: path
+                name: transactionId
+                type: integer
+                description: transaction id
+                required: true
+
+              - in: body
+                name: body
+                description: Update user transaction
+                required: true
+                schema:
+                    $ref: "#/definitions/TransactionUpdate"
+          produces:
+              - application/json
+          responses:
+              "200":
+                  description: User tansactions updated successully
+                  schema:
+                      $ref: "#/definitions/TransactionUpdateResponse"
+              "400":
+                  description: Invalid Fields
+              "500":
+                  description: Internal Server Error
+      delete:
+          security:
+              - Bearer: []
+          tags:
+              - User Transaction delete
+          summary: User transaction delete
+          description: delete a transaction details
+          parameters:
+              - in: header
+                name: Authorization
+                type: string
+                description: Attach Bearer JWT token
+                required: true
+              - in: path
+                name: transactionId
+                type: integer
+                description: transaction id
+                required: true
+          produces:
+              - application/json
+          responses:
+              "200":
+                  description: User tansactions deleted successully
+                  schema:
+                      $ref: "#/definitions/TransactionDeleteResponse"
+              "400":
+                  description: Invalid Fields
+              "500":
+                  description: Internal Server Error
+securityDefinitions:
+    Bearer:
+        type: apiKey
+        name: Authorization
+        in: header
+definitions:
+    AllTransactionsResponse:
+        type: object
+        properties:
+            status:
+                type: integer
+            message:
+                type: string
+            body:
+                type: array
+                items:
+                    type: object
+                    properties:
+                        transactionId:
+                            type: integer
+                        date:
+                            type: string
+                            description: transaction date
+                        description:
+                            type: string
+                            description: transaction description
+                        amount:
+                            type: integer
+                            description: transaction amount
+                        balance:
+                            type: string
+                            description: account balance
+                        type:
+                            type: string
+                            description: transaction type
+                        category:
+                            type: string
+                            description: transaction category
+                        notes:
+                            type: string
+                            description: notes field for user
+
+    TransactionResponse:
+        type: object
+        properties:
+            status:
+                type: integer
+            message:
+                type: string
+            body:
+                type: object
+                properties:
+                    transactionId:
+                        type: integer
+                    date:
+                        type: string
+                        description: transaction date
+                    description:
+                        type: string
+                        description: transaction description
+                    amount:
+                        type: integer
+                        description: transaction amount
+                    balance:
+                        type: string
+                        description: account balance
+                    type:
+                        type: string
+                        description: transaction type
+                    category:
+                        type: string
+                        description: transaction category
+                    notes:
+                        type: string
+                        description: notes field for user
+    TransactionUpdate:
+        type: object
+        properties:
+            category:
+                type: string
+            notes:
+                type: string
+    TransactionUpdateResponse:
+        type: object
+        properties:
+            status:
+                type: integer
+            message:
+                type: string
+            body:
+                type: object
+                properties:
+                    id:
+                        type: integer
+                    category:
+                        type: string
+                    notes:
+                        type: string
+
+    TransactionDeleteResponse:
+        type: object
+        properties:
+            status:
+                type: integer
+            message:
+                type: string

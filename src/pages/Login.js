@@ -13,6 +13,7 @@ export default function Login() {
     const passwordInputRef = useRef();
     const checkboxRef = useRef();
     const [error, setError] = useState();
+    const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -65,6 +66,7 @@ export default function Login() {
         // Pour se connecter pour récupérer le UserId et le token d'authentification
         const url = "http://localhost:3001/api/v1/user/login";
 
+        setIsLoading(true);
         fetch(url, {
             method: "POST",
             body: JSON.stringify({
@@ -81,7 +83,8 @@ export default function Login() {
                     //     title: "",
                     //     message: "Erreur d'identification",
                     // });
-                    throw new Error("test msg");
+                    // throw new Error("test msg");
+                    throw new Error();
                 }
                 return response.json();
             })
@@ -90,24 +93,26 @@ export default function Login() {
                 dispatch(setToken(data.body.token));
                 localStorage.setItem("token", data.body.token);
                 localStorage.setItem("email", data.body.email);
+                setIsLoading(false);
                 navigate("/user/profile");
             })
             .catch((err) => {
-                if (error?.response?.status === 400) {
-                    // dispatch(setLoginError("Erreur d'identification"));
-                    setError({
-                        title: "",
-                        message: "Erreur d'identification222",
-                    });
-                } else {
-                    // dispatch(
-                    //     setLoginError(
-                    //         "Oups! Connexion impossible. Veuillez réesayer plus tard."
-                    //     )
-                    // );
+                setIsLoading(false);
+                // if (error?.response?.status === 400) {
+                // dispatch(setLoginError("Erreur d'identification"));
+                setError({
+                    title: "",
+                    message: "Erreur d'identification",
+                });
+                // } else {
+                //     // dispatch(
+                //     //     setLoginError(
+                //     //         "Oups! Connexion impossible. Veuillez réesayer plus tard."
+                //     //     )
+                //     // );
 
-                    console.log(2);
-                }
+                //     console.log(2);
+                // }
             });
 
         // pour vide les champs
@@ -160,7 +165,11 @@ export default function Login() {
                             />
                             <label htmlFor="remember-me">Remember me</label>
                         </div>
-                        <Button type={"submit"} onClick={() => {}}>
+                        <Button
+                            disabled={isLoading}
+                            type={"submit"}
+                            onClick={() => {}}
+                        >
                             Sign In
                         </Button>
                     </form>
