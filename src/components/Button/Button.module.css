@@ -1,5 +1,6 @@
 .sign_in_button {
-    display: block;
+    display: flex;
+    justify-content: center;
     width: 100%;
     padding: 8px;
     font-size: 1.1rem;

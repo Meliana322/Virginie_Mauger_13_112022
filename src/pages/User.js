@@ -3,9 +3,10 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "../index.css";
 import { useSelector, useDispatch } from "react-redux";
-import { setEditName, setFirstName, setLastName } from "../feature/userSlice";
+import { setFirstName, setLastName } from "../feature/userSlice";
 import { getUserInfo, postUserInfo } from "../api";
 import Button from "../components/Button/Button";
+import style from "./User.module.css";
 
 export default function User() {
     const [isOpen, setIsOpen] = useState(false);
@@ -62,66 +63,67 @@ export default function User() {
             }
         });
 
-    // pour vide les champs
-    // emailInputRef.current.value = "";
-    // passwordInputRef.current.value = "";
-
     return (
         <>
             <Header />
             <main className="main bg-dark">
-                <div className="header">
-                    <h1>
-                        Welcome back
-                        <div>
-                            <pre>
-                                {firstName} {lastName}
-                            </pre>
-                        </div>
-                    </h1>
-                    <button
-                        className="edit-button"
-                        onClick={() => {
-                            setIsOpen((prevIsOpen) => !prevIsOpen);
-                        }}
-                    >
-                        Edit Name
-                    </button>
-                </div>
-                {isOpen && (
+                {isOpen ? (
                     <div className="header">
                         <form onSubmit={submitHandler}>
                             <h1>Welcome back</h1>
                             <input
-                                className="edit-input name"
+                                className={style.edit_input_name}
                                 autoComplete="off"
                                 type="text"
                                 placeholder={firstName}
                                 ref={firstNameInputRef}
                             />
                             <input
-                                className="edit-input name"
+                                className={style.edit_input_name}
                                 autoComplete="off"
                                 type="text"
                                 placeholder={lastName}
                                 ref={lastNameInputRef}
                             />
                             <br /> <br />
-                            <Button className="edit-button" type={"submit"}>
-                                Save
-                            </Button>
-                            <Button
-                                className="cancel-button"
-                                onClick={() => {
-                                    setIsOpen((prevIsOpen) => !prevIsOpen);
-                                }}
-                            >
-                                Cancel
-                            </Button>
+                            <div className={style.button}>
+                                <Button
+                                    className={style.edit_button}
+                                    type={"submit"}
+                                >
+                                    Save
+                                </Button>
+                                <Button
+                                    className={style.edit_button}
+                                    onClick={() => {
+                                        setIsOpen((prevIsOpen) => !prevIsOpen);
+                                    }}
+                                >
+                                    Cancel
+                                </Button>
+                            </div>
                         </form>
                     </div>
+                ) : (
+                    <div className="header">
+                        <h1>
+                            Welcome back
+                            <div>
+                                <pre>
+                                    {firstName} {lastName}
+                                </pre>
+                            </div>
+                        </h1>
+                        <button
+                            className="edit-button"
+                            onClick={() => {
+                                setIsOpen((prevIsOpen) => !prevIsOpen);
+                            }}
+                        >
+                            Edit Name
+                        </button>
+                    </div>
                 )}
-
                 <h2 className="sr-only">Accounts</h2>
                 <section className="account">
                     <div className="account-content-wrapper">

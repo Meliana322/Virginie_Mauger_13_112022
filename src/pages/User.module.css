@@ -1,0 +1,14 @@
+.button {
+    display: flex;
+    margin: 0px auto;
+    width: 30%;
+    gap: 40px;
+}
+.edit_input_name {
+    padding: 7px;
+    width: 150px;
+    border: 2px solid grey;
+    border-radius: 5px;
+    margin: 0 7px;
+    font-size: 16px;
+}

@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { Navigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { setLoginSuccessFul, setToken } from "../feature/loginSlice";
@@ -17,7 +16,7 @@ export default function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // controler si erreur a true ou false
+    // check if error is true or false
 
     if (error) {
         console.log("true");
@@ -31,7 +30,7 @@ export default function Login() {
         const enteredEmail = emailInputRef.current.value;
         const enteredPassword = passwordInputRef.current.value;
 
-        // contrôle input pas vide
+        // input control not empty
         if (
             enteredEmail.trim().length === 0 ||
             enteredPassword.trim().length === 0
@@ -43,7 +42,7 @@ export default function Login() {
             return;
         }
 
-        // contrôle validité email
+        // email validity check
         const regExEmail = (value) => {
             return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value);
         };
@@ -63,6 +62,7 @@ export default function Login() {
         }
         console.log(enteredEmail, enteredPassword);
 
+        // To log in to retrieve the UserId and authentication token
         // Pour se connecter pour récupérer le UserId et le token d'authentification
         const url = "http://localhost:3001/api/v1/user/login";
 
@@ -83,7 +83,6 @@ export default function Login() {
                     //     title: "",
                     //     message: "Erreur d'identification",
                     // });
-                    // throw new Error("test msg");
                     throw new Error();
                 }
                 return response.json();
@@ -98,26 +97,11 @@ export default function Login() {
             })
             .catch((err) => {
                 setIsLoading(false);
-                // if (error?.response?.status === 400) {
-                // dispatch(setLoginError("Erreur d'identification"));
                 setError({
                     title: "",
                     message: "Erreur d'identification",
                 });
-                // } else {
-                //     // dispatch(
-                //     //     setLoginError(
-                //     //         "Oups! Connexion impossible. Veuillez réesayer plus tard."
-                //     //     )
-                //     // );
-
-                //     console.log(2);
-                // }
             });
-
-        // pour vide les champs
-        // emailInputRef.current.value = "";
-        // passwordInputRef.current.value = "";
     };
 
     const errorHandler = (event) => {
@@ -141,7 +125,6 @@ export default function Login() {
                     <form onSubmit={submitHandler}>
                         <div className="input-wrapper">
                             <label htmlFor="username">Username</label>
-                            {/* Lorsque je me deconnecte si state remember me est a true alors affiche imput.value = email */}
                             <input
                                 defaultValue={localStorage.getItem("userEmail")}
                                 type="text"
