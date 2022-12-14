@@ -13,7 +13,6 @@ import User from "./pages/User";
 import Error from "./pages/Error";
 import { getUserInfo } from "./api";
 import { setLoginSuccessFul } from "../src/feature/loginSlice";
-// import ProtectedRoute from "./ProtectedRoute";
 
 function PrivateRoute({ children }) {
     const token = localStorage.getItem("token");

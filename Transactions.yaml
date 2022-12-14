@@ -170,7 +170,7 @@ definitions:
                             type: integer
                             description: transaction amount
                         balance:
-                            type: string
+                            type: integer
                             description: account balance
                         type:
                             type: string
@@ -204,7 +204,7 @@ definitions:
                         type: integer
                         description: transaction amount
                     balance:
-                        type: string
+                        type: integer
                         description: account balance
                     type:
                         type: string

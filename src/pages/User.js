@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "../index.css";
 import { useSelector, useDispatch } from "react-redux";
-import { setFirstName, setLastName } from "../feature/userSlice";
+import { setEditName, setFirstName, setLastName } from "../feature/userSlice";
 import { getUserInfo, postUserInfo } from "../api";
 import Button from "../components/Button/Button";
 import style from "./User.module.css";
@@ -35,14 +35,13 @@ export default function User() {
                 console.log(data);
                 dispatch(setFirstName(data.body.firstName));
                 dispatch(setLastName(data.body.lastName));
+                setIsOpen(false);
             });
 
         const enteredFirstName = firstNameInputRef.current.value;
         const enteredLastName = lastNameInputRef.current.value;
         console.log(enteredFirstName, enteredLastName);
     };
-
-    // const formReset = (event) => {};
 
     getUserInfo()
         .then((data) => {
@@ -52,14 +51,6 @@ export default function User() {
         })
         .catch((err) => {
             if (err.response.status === 400) {
-                // dispatch(setLoginError("Erreur d'identification"));
-            } else {
-                // dispatch(
-                //     setLoginError(
-                //         "Oups! Connexion impossible. Veuillez réesayer plus tard."
-                //     )
-                // );
-                // console.log(error);
             }
         });
 
@@ -90,6 +81,9 @@ export default function User() {
                                 <Button
                                     className={style.edit_button}
                                     type={"submit"}
+                                    onClick={() => {
+                                        setEditName(true);
+                                    }}
                                 >
                                     Save
                                 </Button>

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { setLoginSuccessFul, setToken } from "../feature/loginSlice";
@@ -79,10 +79,6 @@ export default function Login() {
         })
             .then((response) => {
                 if (!response.ok) {
-                    // setError({
-                    //     title: "",
-                    //     message: "Erreur d'identification",
-                    // });
                     throw new Error();
                 }
                 return response.json();
@@ -135,7 +131,7 @@ export default function Login() {
                         <div className="input-wrapper">
                             <label htmlFor="password">Password</label>
                             <input
-                                type="current-password"
+                                type="password"
                                 id="password"
                                 ref={passwordInputRef}
                             />
